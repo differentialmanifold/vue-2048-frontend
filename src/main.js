@@ -1,0 +1,20 @@
+// The Vue build version to load with the `import` command
+// (runtime-only or standalone) has been set in webpack.base.conf with an alias.
+
+import axios from 'axios'
+import './utils/rem'
+import './assets/scss/style.scss'
+import './assets/scss/main.scss'
+import './swipe.js'
+import Vue from 'vue'
+import BoardView from './components/BoardView.vue'
+
+Vue.config.productionTip = false
+
+axios.defaults.baseURL = 'http://localhost:5000'
+Vue.prototype.$axios = axios
+
+new Vue({
+  el: '#app',
+  render: h => h(BoardView)
+})
