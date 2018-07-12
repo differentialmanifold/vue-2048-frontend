@@ -25,23 +25,23 @@ export default {
   },
   mounted() {
     var self = this;
-    boardInstance.init(response => this.board = response.data);
+    boardInstance.init().then(response => this.board = response.data);
 
     window.addEventListener("keydown", this.handleKeyDown.bind(this));
 
-    var options = {isStopPropagation: true, isPreventDefault: true};
-    Rhui.mobile.swipeLeft(window, function() {
-      self.handleKeyDown({ keyCode: 37 });
-    }, options);
-    Rhui.mobile.swipeUp(window, function() {
-      self.handleKeyDown({ keyCode: 38 });
-    }, options);
-    Rhui.mobile.swipeRight(window, function() {
-      self.handleKeyDown({ keyCode: 39 });
-    }, options);
-    Rhui.mobile.swipeDown(window, function() {
-      self.handleKeyDown({ keyCode: 40 });
-    }, options);
+  //   var options = {isStopPropagation: true, isPreventDefault: true};
+  //   Rhui.mobile.swipeLeft(window, function() {
+  //     self.handleKeyDown({ keyCode: 37 });
+  //   }, options);
+  //   Rhui.mobile.swipeUp(window, function() {
+  //     self.handleKeyDown({ keyCode: 38 });
+  //   }, options);
+  //   Rhui.mobile.swipeRight(window, function() {
+  //     self.handleKeyDown({ keyCode: 39 });
+  //   }, options);
+  //   Rhui.mobile.swipeDown(window, function() {
+  //     self.handleKeyDown({ keyCode: 40 });
+  //   }, options);
   },
   beforeDestroy() {
     window.removeEventListener("keydown", this.handleKeyDown.bind(this));
@@ -61,13 +61,12 @@ export default {
       //press key p
       if (event.keyCode == 80) {
         this.onRestart();
-        var myVar = setInterval(myTime, 3000);
+        var myVar = setInterval(myTime, 1000);
         function myTime() {
           if (!self.board.done) {
             var direction = ~~(Math.random() * 4);
-            var result = self.board.step(direction);
+            boardInstance.move(direction).then(response => self.board = response.data);
             console.log(direction);
-            console.log(result);
           } else {
             clearInterval(myVar);
           }
@@ -75,7 +74,7 @@ export default {
       }
     },
     onRestart() {
-      boardInstance.init(response => this.board = response.data);
+      boardInstance.init().then(response => this.board = response.data);
     }
   },
   components: {
