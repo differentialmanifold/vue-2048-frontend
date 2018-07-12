@@ -3,7 +3,7 @@
         <div v-for="(r_item, index1) in board.cells" :key="index1">
             <cell v-for="(c_item, index2) in r_item" :key="index2"></cell>
         </div>
-        <tile-view v-for="(tile, index3) in tiles" :key="'title' + index3" :tile="tile"/>
+        <tile-view v-for="(tile, index3) in board.tiles" :key="'title' + index3" :tile="tile"/>
 
         <game-end-overlay :board="board" :onrestart="onRestart"></game-end-overlay>
     </div>
@@ -14,18 +14,18 @@ import Cell from "./Cell.vue";
 import TileView from "./TileView.vue";
 import GameEndOverlay from "./GameEndOverlay.vue";
 import { Board } from "../board";
+
+var boardInstance = new Board();
+
 export default {
   data() {
     return {
-      board: new Board(),
-      test: {}
+      board: {}
     };
   },
   mounted() {
     var self = this;
-    this.$axios.get('/init',{port:5000}).then(function(response){
-      self.test = response;
-    })
+    boardInstance.init(response => this.board = response.data);
 
     window.addEventListener("keydown", this.handleKeyDown.bind(this));
 
@@ -46,30 +46,24 @@ export default {
   beforeDestroy() {
     window.removeEventListener("keydown", this.handleKeyDown.bind(this));
   },
-  computed: {
-    tiles() {
-      return this.board.tiles.filter(tile => tile.value != 0);
-    }
-  },
   methods: {
     handleKeyDown(event) {
       var self = this;
-      if (this.board.hasDone()) {
+      if (this.board.done) {
         return;
       }
       if (event.keyCode >= 37 && event.keyCode <= 40) {
         event.preventDefault && event.preventDefault();
         var direction = event.keyCode - 37;
-        this.board.move(direction);
+        boardInstance.move(direction).then(response => this.board = response.data);
       }
 
       //press key p
       if (event.keyCode == 80) {
         this.onRestart();
-        console.log(this.board.init());
         var myVar = setInterval(myTime, 3000);
         function myTime() {
-          if (!self.board.hasDone()) {
+          if (!self.board.done) {
             var direction = ~~(Math.random() * 4);
             var result = self.board.step(direction);
             console.log(direction);
@@ -81,7 +75,7 @@ export default {
       }
     },
     onRestart() {
-      this.board = new Board();
+      boardInstance.init(response => this.board = response.data);
     }
   },
   components: {

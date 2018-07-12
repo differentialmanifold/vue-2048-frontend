@@ -27,12 +27,12 @@
                 if (tile.mergedInto) {
                     classArray.push('merged');
                 }
-                if (tile.isNew()) {
+                if (tile.is_new) {
                     classArray.push('new');
                 }
-                if (tile.hasMoved()) {
-                    classArray.push('row_from_' + tile.fromRow() + '_to_' + tile.toRow());
-                    classArray.push('column_from_' + tile.fromColumn() + '_to_' + tile.toColumn());
+                if (tile.has_moved) {
+                    classArray.push('row_from_' + tile.from_row + '_to_' + tile.to_row);
+                    classArray.push('column_from_' + tile.from_column + '_to_' + tile.to_column);
                     classArray.push('isMoving');
                 }
 

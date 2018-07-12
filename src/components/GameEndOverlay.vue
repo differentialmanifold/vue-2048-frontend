@@ -25,12 +25,12 @@
         },
         computed:{
             show(){
-                return this.board.hasWon() || this.board.hasLost()
+                return this.board.done;
             },
             contents(){
-                if(this.board.hasWon()){
+                if(this.board.won){
                     return 'Good Job!'
-                }else if(this.board.hasLost()){
+                }else if(this.board.hasLost){
                     return 'Game Over'
                 }else {
                     return ''
