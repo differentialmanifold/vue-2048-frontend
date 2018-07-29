@@ -14,4 +14,8 @@ Board.prototype.move = function (direction) {
     return axios.get('/step/' + direction);
 };
 
+Board.prototype.automove = function () {
+    return axios.get('/autostep');
+}
+
 export { Board }

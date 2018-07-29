@@ -40,7 +40,6 @@
 
         methods:{
             restart(){
-                debugger;
                 this.onrestart && this.onrestart()
             }
         },

@@ -25,23 +25,23 @@ export default {
   },
   mounted() {
     var self = this;
-    boardInstance.init().then(response => this.board = response.data);
+    boardInstance.init().then(response => (this.board = response.data));
 
     window.addEventListener("keydown", this.handleKeyDown.bind(this));
 
-  //   var options = {isStopPropagation: true, isPreventDefault: true};
-  //   Rhui.mobile.swipeLeft(window, function() {
-  //     self.handleKeyDown({ keyCode: 37 });
-  //   }, options);
-  //   Rhui.mobile.swipeUp(window, function() {
-  //     self.handleKeyDown({ keyCode: 38 });
-  //   }, options);
-  //   Rhui.mobile.swipeRight(window, function() {
-  //     self.handleKeyDown({ keyCode: 39 });
-  //   }, options);
-  //   Rhui.mobile.swipeDown(window, function() {
-  //     self.handleKeyDown({ keyCode: 40 });
-  //   }, options);
+    //   var options = {isStopPropagation: true, isPreventDefault: true};
+    //   Rhui.mobile.swipeLeft(window, function() {
+    //     self.handleKeyDown({ keyCode: 37 });
+    //   }, options);
+    //   Rhui.mobile.swipeUp(window, function() {
+    //     self.handleKeyDown({ keyCode: 38 });
+    //   }, options);
+    //   Rhui.mobile.swipeRight(window, function() {
+    //     self.handleKeyDown({ keyCode: 39 });
+    //   }, options);
+    //   Rhui.mobile.swipeDown(window, function() {
+    //     self.handleKeyDown({ keyCode: 40 });
+    //   }, options);
   },
   beforeDestroy() {
     window.removeEventListener("keydown", this.handleKeyDown.bind(this));
@@ -55,26 +55,32 @@ export default {
       if (event.keyCode >= 37 && event.keyCode <= 40) {
         event.preventDefault && event.preventDefault();
         var direction = event.keyCode - 37;
-        boardInstance.move(direction).then(response => this.board = response.data);
+        boardInstance
+          .move(direction)
+          .then(response => (this.board = response.data));
       }
 
       //press key p
       if (event.keyCode == 80) {
         this.onRestart();
-        var myVar = setInterval(myTime, 1000);
-        function myTime() {
-          if (!self.board.done) {
-            var direction = ~~(Math.random() * 4);
-            boardInstance.move(direction).then(response => self.board = response.data);
-            console.log(direction);
-          } else {
-            clearInterval(myVar);
-          }
+        function asyncPro() {
+          // var direction = ~~(Math.random() * 4);
+          // console.log('direction ' + direction);
+          boardInstance.automove().then(response => {
+            self.board = response.data
+            if (!self.board.done) {
+              asyncPro();
+            } else {
+              console.log('has done')
+            }
+          });
         }
+
+        asyncPro();
       }
     },
     onRestart() {
-      boardInstance.init().then(response => this.board = response.data);
+      boardInstance.init().then(response => (this.board = response.data));
     }
   },
   components: {
