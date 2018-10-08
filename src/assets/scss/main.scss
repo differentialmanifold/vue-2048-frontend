@@ -1,3 +1,7 @@
+$board-size: 4;
+$cell-width: 100px;
+$border-width: 5px;
+
 @font-face {
   font-family: "Clear Sans";
   src: url('../clear-sans.ttf') format('truetype');
@@ -13,18 +17,11 @@ body {
   font-size: 21px;
 }
 
-.text {
-  order: 2;
-  padding-top: 40px;
-  width: 440px;
-  font-weight: bold;
-}
-
 .board {
   order: 1;
-  width: 440px;
-  height: 440px;
-  padding: 5px;
+  width: $board-size * ($cell-width + 2 * $border-width);
+  height: $board-size * ($cell-width + 2 * $border-width);
+  padding: $border-width;
   background-color: #baa;
   border-radius: 7px;
   outline: none;
@@ -37,9 +34,9 @@ body {
 }
 
 .cell, .tile {
-  width: 100px;
-  height: 100px;
-  margin: 5px;
+  width: $cell-width;
+  height: $cell-width;
+  margin: $border-width;
   line-height: 90px;
   display: inline-block;
   font-size: 55px;

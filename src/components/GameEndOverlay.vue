@@ -1,6 +1,6 @@
 <template>
     <div class="overlay" v-show="show">
-        <p class="message">{{contents}}</p>
+        <span class="message">{{contents}}</span>
         <button class="tryAgain" @click="restart" >Try again</button>
     </div>
 </template>
